@@ -6,13 +6,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 xy = fragCoord.xy/iResolution.xy; //Get Coordinates relative to resolution (0.0 to 1.0)
     vec4 sbs;
     
-    if(xy.x > 0.5)
+    if(xy.x < 0.5)
     {
-    	sbs = texture(iChannel0,vec2(xy.y,1.0-xy.x));		//Left Eye
+    	sbs = texture(iChannel0,vec2(1.0-xy.y,xy.x*2.0));		//Left Eye +90°
     }
 	else
     {
-        sbs = texture(iChannel1,vec2(1.0-xy.y,xy.x));		//Right Eye
+        sbs = texture(iChannel1,vec2(xy.y,1.0-(xy.x*2.0)+1.0));		//Right Eye -90°
     }
-    fragColor = sbs;		//Output
+    fragColor = sbs;		//Output sbs
 }

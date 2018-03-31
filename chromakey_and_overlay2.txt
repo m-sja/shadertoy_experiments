@@ -1,0 +1,28 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 xy = fragCoord.xy/iResolution.xy; //Get Coordinates relative to resolution (0.0 to 1.0)
+    vec4 colorA = vec4(texture(iChannel0,xy));//Texture Input Channel 0
+    vec4 colorB = vec4(texture(iChannel1,xy));//Texture Input Channel 1
+    vec4 colorC = vec4(texture(iChannel2,xy));//Texture Input Channel 2
+    float colorD = float(texture(iChannel3,xy));//Texture Input Channel 3
+    vec4 sbs;
+    
+    if(xy.y > 0.1)	//If y more then 10% then
+    {
+        if(colorA.r +0.05 < colorA.g)	//if Pixel is more green then red (simple Chomakey)
+        {
+            sbs = colorB;		//Texture B
+        }
+        else
+        {
+            sbs = colorC; //colorC;		//Texture C
+        }
+    }
+    else			//If less then 10% of Y overlay Texture D
+    {
+        sbs.r = colorD; 
+        sbs.g = colorD;
+        sbs.b = colorD;
+    }
+    fragColor = sbs;		//Output
+}

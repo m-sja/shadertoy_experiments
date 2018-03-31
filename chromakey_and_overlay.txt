@@ -1,0 +1,31 @@
+// Just some random Experiments with shadertoy.com
+// Thanks to Omar Shehata for getting me started.
+// https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders--cms-23313
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 xy = fragCoord.xy/iResolution.xy; //Get Coordinates relative to resolution (0.0 to 1.0)
+    vec4 colorA = vec4(texture(iChannel0,xy));//Texture Input Channel 0
+    vec4 colorB = vec4(texture(iChannel1,xy));//Texture Input Channel 1
+    float colorC = float(texture(iChannel2,xy));//Texture Input Channel 2
+    vec4 sbs;
+    
+    if(xy.y > 0.1)	//If y more then 10% then
+    {
+        if(colorA.r +0.05 < colorA.g)	//if Pixel is more green then red (simple Chomakey)
+        {
+            sbs = colorB;		//Texture B
+        }
+        else
+        {
+            sbs = colorA;		//Texture A
+        }
+    }
+    else			//If less then 10% of Y overlay Texture2
+    {
+        sbs.r = colorC; 
+        sbs.g = colorC;
+        sbs.b = colorC;
+    }
+    fragColor = sbs;		//Output
+}
